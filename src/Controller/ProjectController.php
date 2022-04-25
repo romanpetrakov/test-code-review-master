@@ -15,7 +15,7 @@ class ProjectController
      * @var DataStorage
      */
     private $storage;
-
+// или в классе надо везде писать комментарии в случае наличия объявления типов или нигде
     public function __construct(DataStorage $storage)
     {
         $this->storage = $storage;
@@ -26,8 +26,11 @@ class ProjectController
      * 
      * @Route("/project/{id}", name="project", method="GET")
      */
-    public function projectAction(Request $request)
+    public function projectAction(Request $request)//нет объявления типа возвращаемого значения
     {
+        //обычно обработку исключений реализуют не в самом контроллер
+        // а на уровне приложения - перенаправляя на специальный ErrorContoller или на уровне middleware
+        // для того чтобы не дублировать логику во всех экшенах.
         try {
             $project = $this->storage->getProjectById($request->get('id'));
 
@@ -61,9 +64,9 @@ class ProjectController
      * @Route("/project/{id}/tasks", name="project-create-task", method="PUT")
      */
     public function projectCreateTaskAction(Request $request)
-    {
+    {// код написан табуляцией а не пробелами. в разных текстовых редакторах он может отображаться по разному
 		$project = $this->storage->getProjectById($request->get('id'));
-		if (!$project) {
+		if (!$project) { // в projectAction Обработка ошибок реализуется немного по другому.
 			return new JsonResponse(['error' => 'Not found']);
 		}
 		
